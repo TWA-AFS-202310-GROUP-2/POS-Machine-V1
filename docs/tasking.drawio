@@ -392,14 +392,14 @@
         </mxGraphModel>
     </diagram>
     <diagram name="2" id="Of7Z0-I9mx18OM6yg6Lm">
-        <mxGraphModel dx="967" dy="711" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="967" dy="689" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="Ed6zVFW_2ngIR0K7mprT-0"/>
                 <mxCell id="Ed6zVFW_2ngIR0K7mprT-1" parent="Ed6zVFW_2ngIR0K7mprT-0"/>
-                <mxCell id="Ed6zVFW_2ngIR0K7mprT-2" value="printReceipt" style="rounded=0;whiteSpace=wrap;html=1;" parent="Ed6zVFW_2ngIR0K7mprT-1" vertex="1">
+                <mxCell id="Ed6zVFW_2ngIR0K7mprT-2" value="printReceipt" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#3399FF;" parent="Ed6zVFW_2ngIR0K7mprT-1" vertex="1">
                     <mxGeometry x="126" y="298" width="87" height="373" as="geometry"/>
                 </mxCell>
-                <mxCell id="Ed6zVFW_2ngIR0K7mprT-3" value="parseTags" style="rounded=0;whiteSpace=wrap;html=1;" parent="Ed6zVFW_2ngIR0K7mprT-1" vertex="1">
+                <mxCell id="Ed6zVFW_2ngIR0K7mprT-3" value="parseTags" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#3399FF;" parent="Ed6zVFW_2ngIR0K7mprT-1" vertex="1">
                     <mxGeometry x="377" y="299" width="82" height="103" as="geometry"/>
                 </mxCell>
                 <mxCell id="Ed6zVFW_2ngIR0K7mprT-4" value="generateReceiptItems" style="rounded=0;whiteSpace=wrap;html=1;" parent="Ed6zVFW_2ngIR0K7mprT-1" vertex="1">
@@ -561,7 +561,7 @@
                         <mxPoint x="29" y="-1" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="Ed6zVFW_2ngIR0K7mprT-35" value="parseQuantity" style="rounded=0;whiteSpace=wrap;html=1;" parent="Ed6zVFW_2ngIR0K7mprT-1" vertex="1">
+                <mxCell id="Ed6zVFW_2ngIR0K7mprT-35" value="parseQuantity" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#3399FF;" parent="Ed6zVFW_2ngIR0K7mprT-1" vertex="1">
                     <mxGeometry x="622" y="300" width="105" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="Ed6zVFW_2ngIR0K7mprT-36" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" parent="Ed6zVFW_2ngIR0K7mprT-1" target="Ed6zVFW_2ngIR0K7mprT-35" edge="1">

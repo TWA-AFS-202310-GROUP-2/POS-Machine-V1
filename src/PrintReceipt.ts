@@ -24,8 +24,24 @@ export function printReceipt(tags: string[]): string {
   return renderReceipt(receiptItems)
 }
 
+function parseQuantity(quantityStr: string): number {
+  const quantity = parseFloat(quantityStr)
+  if (isNaN(quantity)) {
+    throw new Error('Not a valid quantity')
+  }
+  return quantity
+}
+
 function parseTags(tags: string[]): Tag[] {
-  return []
+  const parsedTags: Tag[] = []
+  for (const tag of tags) {
+    const parts = tag.split('-')
+    const barcode = parts[0]
+    const quantity = parts.length > 1 ? parseQuantity(parts[1]) : 1
+    const filteredTag: Tag | undefined = parsedTags.find(parsedTag => parsedTag.barcode === barcode)
+    filteredTag === undefined ? parsedTags.push({ barcode: barcode, quantity: quantity }) : filteredTag.quantity += quantity
+  }
+  return parsedTags
 }
 
 function generateReceiptItems(parsedTags: Tag[]): ReceiptItem[] {
