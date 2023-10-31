@@ -67,7 +67,7 @@ Discounted prices：7.50(yuan)
       'ITEM000001',
       'ITEM000001',
       'ITEM000001',
-      'ITEMA00003-2.5',
+      'ITEM000003-2.5',
       'ITEM000005',
       'ITEM000005-2.5',
     ]
