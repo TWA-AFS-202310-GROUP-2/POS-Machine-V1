@@ -67,10 +67,7 @@ function arrageTags(tags: string[]): Map<string, ReceiptItem> {
   for (const tag of tags) {
     const [barcode, quantityStr] = tag.split('-')
     const quantity = quantityStr ? parseFloat(quantityStr) : 1
-    const item = itemsMap.get(barcode)
-    if (!item) {
-      throw new Error(`Item with barcode ${barcode} not found`)
-    }
+    const item = itemsMap.get(barcode)!
     const receiptItem = receiptMap.get(barcode)
     if (receiptItem) {
       receiptItem.quantity += quantity
