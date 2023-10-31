@@ -59,9 +59,9 @@ function parseTags(tags: string[]): Tag[] {
 
 }
 
-function parseQuantity(key: string, tags: string[]) {
+function parseQuantity(keyBarCode: string, tags: string[]) {
   let quantity = 0
-  tags.filter((str) => str.includes(key))
+  tags.filter((str) => str.includes(keyBarCode))
     .forEach((str) => {
       if (str.includes('-')) {
         quantity += Number(str.split('-')[1])
@@ -107,9 +107,9 @@ function generateReceiptItems(tags: Tag[]): ReceiptItem[] {
 }
 
 
-function hasPromotionOrNot(barcode: string): string | undefined {
+function hasPromotionOrNot(barCode: string): string | undefined {
   const promotions = loadPromotions()
-  return promotions.find((promotion) => promotion.barcodes.includes(barcode))?.type
+  return promotions.find((promotion) => promotion.barcodes.includes(barCode))?.type
 }
 
 
