@@ -44,13 +44,24 @@ function parseTags(tags: string[]): Tag[] {
   return parsedTags
 }
 
+function calculateDiscountedSubtotal(quantity: number, price: number, promotionType: string | undefined): number {
+  if (promotionType === 'BUY_TWO_GET_ONE_FREE') {
+    return (quantity - Math.floor(quantity / 3)) * price
+  } else {
+    return quantity * price
+  }
+}
+
 function generateReceiptItems(parsedTags: Tag[]): ReceiptItem[] {
   const allItems = loadAllItems()
+  const promotions = loadPromotions()
   return parsedTags.map(parsedTag => {
     const item = allItems.find(item => item.barcode === parsedTag.barcode)
     if (item === undefined) {
       throw new Error(`The barcode ${parsedTag} is not registered`)
     }
+    const promotion = promotions.find(promotion => promotion.barcodes.includes(parsedTag.barcode))
+    const discountedSubtotal = calculateDiscountedSubtotal(parsedTag.quantity, item.price, promotion?.type)
     return {
       name: item.name,
       quantity: {
@@ -58,8 +69,8 @@ function generateReceiptItems(parsedTags: Tag[]): ReceiptItem[] {
         quantifier: parsedTag.quantity > 1 ? `${item.unit}s` : item.unit
       },
       unitPrice: item.price,
-      subtotal: 0,
-      discountedPrice: 0
+      subtotal: discountedSubtotal,
+      discountedPrice: parsedTag.quantity * item.price - discountedSubtotal
     }
   })
 }
