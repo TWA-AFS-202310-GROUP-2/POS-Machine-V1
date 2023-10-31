@@ -11,11 +11,6 @@ type Item = {
   price: number
 }
 
-type Promotion = {
-  type: string
-  barcodes: string[]
-}
-
 type ReceiptItem = {
   item: Item
   quantity: number
@@ -34,8 +29,8 @@ export function printReceipt(tags: string[]): string {
   return buildReceipt(tags)
 }
 
-function buildItemsMap(items: any): Map<string, any> {
-  const itemsMap = new Map<string, any>()
+function buildItemsMap(items: Item[]): Map<string, Item> {
+  const itemsMap = new Map<string, Item>()
   for (const item of items) {
     itemsMap.set(item.barcode, item)
   }
@@ -61,7 +56,7 @@ function checkTagExist(tag: string): string {
 function checkTagRuleValid(tag: string): string {
   const [barcode, quantityStr] = tag.split('-')
   const quantity = quantityStr ? parseFloat(quantityStr) : 1
-  if (itemsMap.get(barcode).unit !== 'pound' && quantity % 1 !== 0) {
+  if (itemsMap.get(barcode)!.unit !== 'pound' && quantity % 1 !== 0) {
     return '[ERROR]: invalid rule'
   }
   return ''
@@ -73,6 +68,9 @@ function arrageTags(tags: string[]): Map<string, ReceiptItem> {
     const [barcode, quantityStr] = tag.split('-')
     const quantity = quantityStr ? parseFloat(quantityStr) : 1
     const item = itemsMap.get(barcode)
+    if (!item) {
+      throw new Error(`Item with barcode ${barcode} not found`)
+    }
     const receiptItem = receiptMap.get(barcode)
     if (receiptItem) {
       receiptItem.quantity += quantity
@@ -111,8 +109,8 @@ function computeSubtotal(receiptMap: Map<string, ReceiptItem>): [Map<string, Rec
 }
 
 function renderReceipt(receiptMap: Map<string, ReceiptItem>, total: number, savings: number): string {
-  let receiptText = `***<store earning no money>Receipt ***\n`
-  for (const [barcode, {item, quantity, subtotal}] of receiptMap) {
+  let receiptText = '***<store earning no money>Receipt ***\n'
+  for (const [, {item, quantity, subtotal}] of receiptMap) {
     receiptText += `Name：${item.name}，Quantity：${quantity} ${item.unit}s，Unit：${item.price.toFixed(2)}(yuan)，Subtotal：${subtotal.toFixed(2)}(yuan)\n`
   }
   receiptText += `----------------------\nTotal：${total.toFixed(2)}(yuan)\nDiscounted prices：${savings.toFixed(2)}(yuan)\n**********************`
