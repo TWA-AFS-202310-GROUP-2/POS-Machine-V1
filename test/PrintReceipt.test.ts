@@ -24,4 +24,15 @@ Discounted prices：7.50(yuan)
 
     expect(printReceipt(tags)).toEqual(expectText)
   })
+
+  it('should return error message when input tags are beyond range', () => {
+    const tags = [
+      'ITEM0000010',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ]
+
+    expect(printReceipt(tags)).toEqual('Reject! Input invalid BarCode')
+  })
 })

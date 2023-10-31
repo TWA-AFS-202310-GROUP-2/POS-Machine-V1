@@ -31,7 +31,7 @@ export function printReceipt(tags: string[]): string {
   const parsedTags = parseTags(tags)
 
   if (!isValidateItem(parsedTags)) {
-    return "Reject! Input invalid BarCode"
+    return 'Reject! Input invalid BarCode'
   }
 
   const receiptItems = generateReceiptItems(parsedTags)
@@ -76,7 +76,7 @@ function parseQuantity(keyBarCode: string, tags: string[]) {
 
 function isValidateItem(parsedTags: Tag[]): boolean {
   const allItemsBarCode = loadAllItems().map((item) => item.barcode)
-  return parsedTags.some((item) => allItemsBarCode.includes(item.barcode))
+  return parsedTags.find((item) => !allItemsBarCode.includes(item.barcode)) === undefined
 }
 
 function generateReceiptItems(tags: Tag[]): ReceiptItem[] {
