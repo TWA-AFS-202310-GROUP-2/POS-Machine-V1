@@ -45,7 +45,23 @@ function parseTags(tags: string[]): Tag[] {
 }
 
 function generateReceiptItems(parsedTags: Tag[]): ReceiptItem[] {
-  return []
+  const allItems = loadAllItems()
+  return parsedTags.map(parsedTag => {
+    const item = allItems.find(item => item.barcode === parsedTag.barcode)
+    if (item === undefined) {
+      throw new Error(`The barcode ${parsedTag} is not registered`)
+    }
+    return {
+      name: item.name,
+      quantity: {
+        value: parsedTag.quantity,
+        quantifier: parsedTag.quantity > 1 ? `${item.unit}s` : item.unit
+      },
+      unitPrice: item.price,
+      subtotal: 0,
+      discountedPrice: 0
+    }
+  })
 }
 
 function renderReceipt(receiptItems: ReceiptItem[]): string {
