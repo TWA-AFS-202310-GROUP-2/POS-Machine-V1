@@ -64,24 +64,18 @@ function generateReceiptItems(parsedTags: Tag[]): ReceiptItem[] {
     const discountedSubtotal = calculateDiscountedSubtotal(parsedTag.quantity, item.price, promotion?.type)
     return {
       name: item.name,
-      quantity: {
-        value: parsedTag.quantity,
-        quantifier: parsedTag.quantity > 1 ? `${item.unit}s` : item.unit
-      },
+      quantity: { value: parsedTag.quantity, quantifier: parsedTag.quantity > 1 ? `${item.unit}s` : item.unit },
       unitPrice: item.price,
       subtotal: discountedSubtotal,
       discountedPrice: parsedTag.quantity * item.price - discountedSubtotal
-    }
-  })
+    }})
 }
 
 function renderReceipt(receiptItems: ReceiptItem[]): string {
-  return `***<store earning no money>Receipt ***
-Name：Sprite，Quantity：5 bottles，Unit：3.00(yuan)，Subtotal：12.00(yuan)
-Name：Litchi，Quantity：2.5 pounds，Unit：15.00(yuan)，Subtotal：37.50(yuan)
-Name：Instant Noodles，Quantity：3 bags，Unit：4.50(yuan)，Subtotal：9.00(yuan)
-----------------------
-Total：58.50(yuan)
-Discounted prices：7.50(yuan)
-**********************`
+  return ['***<store earning no money>Receipt ***']
+    .concat(receiptItems.map(receiptItem => `Name：${receiptItem.name}，Quantity：${receiptItem.quantity.value} ${receiptItem.quantity.quantifier}，Unit：${receiptItem.unitPrice.toFixed(2)}(yuan)，Subtotal：${receiptItem.subtotal.toFixed(2)}(yuan)`))
+    .concat(['----------------------'])
+    .concat([`Total：${receiptItems.reduce((accumulator, current) => accumulator + current.subtotal, 0).toFixed(2)}(yuan)`])
+    .concat([`Discounted prices：${(receiptItems.reduce((accumulator, current) => accumulator + current.discountedPrice, 0)).toFixed(2)}(yuan)`])
+    .concat(['**********************']).join('\n')
 }
