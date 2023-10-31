@@ -84,11 +84,11 @@ function buildReceipt(tags: string[]): string {
 }
 
 function generateRecipt(tagsMap: Map<string, ReceiptItem>): string {
-  const res = computeSubtotal(tagsMap)
+  const res = computeSubtotalAndTotalDiscount(tagsMap)
   return renderReceipt(res[0], res[1], res[2])
 }
 
-function computeSubtotal(receiptMap: Map<string, ReceiptItem>): [Map<string, ReceiptItem>, number, number] {
+function computeSubtotalAndTotalDiscount(receiptMap: Map<string, ReceiptItem>): [Map<string, ReceiptItem>, number, number] {
   let total = 0
   let savings = 0
   for (const [barcode, {item, quantity}] of receiptMap) {
