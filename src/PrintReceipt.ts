@@ -27,7 +27,7 @@ export function printReceipt(tags: string[]): string {
     }
   }
   const receiptMap = arrageTags(tags)
-  return buildRecipt(receiptMap)
+  return buildReceipt(receiptMap)
 }
 
 function buildItemsMap(items: Item[]): Map<string, Item> {
@@ -79,7 +79,7 @@ function arrageTags(tags: string[]): Map<string, ReceiptItem> {
   return receiptMap
 }
 
-function buildRecipt(tagsMap: Map<string, ReceiptItem>): string {
+function buildReceipt(tagsMap: Map<string, ReceiptItem>): string {
   const res = computeSubtotalAndTotalDiscount(tagsMap)
   return renderReceipt(res[0], res[1], res[2])
 }
