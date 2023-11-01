@@ -2,15 +2,15 @@ import { loadAllItems, loadPromotions } from './Dependencies'
 
 export interface Tag {
   barcode: string,
-  quantity: number
+  quantity?: number
 }
 
 export interface ReceiptItem {
   name?: string,
   quantity?: Quantity,
-  unitPrice?: string,
-  subtotal?: string,
-  discountedPrice?: string
+  unitPrice?: number,
+  subtotal?: number,
+  discountedPrice?: number
 }
 
 export interface Quantity {
@@ -19,14 +19,6 @@ export interface Quantity {
 }
 
 export function printReceipt(tags: string[]): string {
-  //   return `***<store earning no money>Receipt ***
-  // Name：Sprite，Quantity：5 bottles，Unit：3.00(yuan)，Subtotal：12.00(yuan)
-  // Name：Litchi，Quantity：2.5 pounds，Unit：15.00(yuan)，Subtotal：37.50(yuan)
-  // Name：Instant Noodles，Quantity：3 bags，Unit：4.50(yuan)，Subtotal：9.00(yuan)
-  // ----------------------
-  // Total：58.50(yuan)
-  // Discounted prices：7.50(yuan)
-  // **********************`
 
   const parsedTags = parseTags(tags)
 
@@ -42,19 +34,34 @@ export function printReceipt(tags: string[]): string {
 }
 
 function parseTags(tags: string[]): Tag[] {
-  const parsedTags: Tag[] = []
-  const alreadyParsed: string[] = []
+  // const parsedTags: Tag[] = []
+  // const alreadyParsed: string[] = []
 
-  for (const tag of tags) {
-    const item = tag.split('-')[0]
-    if (!alreadyParsed.includes(item)) {
-      parsedTags.push({
-        barcode: item,
-        quantity: parseQuantity(item, tags)
-      })
-      alreadyParsed.push(item)
-    }
-  }
+  // for (const tag of tags) {
+  //   const item = tag.split('-')[0]
+  //   if (!alreadyParsed.includes(item)) {
+  //     parsedTags.push({
+  //       barcode: item,
+  //       quantity: parseQuantity(item, tags)
+  //     })
+  //     alreadyParsed.push(item)
+  //   }
+  // }
+
+  //way 2
+  // const parsedTagMap = new Map(tags.map((tag) => [tag.split('-')[0], {
+  //   barcode: tag.split('-')[0],
+  //   quantity: parseQuantity(tag.split('-')[0], tags)
+  // }]))
+  // const parsedTags = Array.from(parsedTagMap.values())
+
+  //way 3
+  const quantityMap = parseAllQuantity(tags)
+  const parsedTagMap = new Map(tags.map((tag) => [tag.split('-')[0], {
+    barcode: tag.split('-')[0],
+    quantity: quantityMap.get(tag.split('-')[0])
+  }]))
+  const parsedTags = Array.from(parsedTagMap.values())
   return parsedTags
 
 }
@@ -70,8 +77,15 @@ function parseQuantity(keyBarCode: string, tags: string[]) {
       }
     })
   return quantity
+}
 
-
+function parseAllQuantity(tags: string[]): Map<string, number> {
+  const quantityMap = new Map<string, number>()
+  tags.forEach((str) => {
+    const [barcode, quantity] = str.split('-')
+    quantityMap.set(barcode, (Number(quantity) || 1) + (quantityMap.get(barcode) || 0))
+  })
+  return quantityMap
 }
 
 function isValidateItem(parsedTags: Tag[]): boolean {
@@ -88,18 +102,18 @@ function generateReceiptItems(tags: Tag[]): ReceiptItem[] {
     const receiptItem: ReceiptItem = {
       name: item?.name,
       quantity: {
-        value: tag.quantity,
+        value: Number(tag.quantity),
         quantifier: item?.unit + 's'
       },
-      unitPrice: item?.price.toFixed(2)
+      unitPrice: item?.price
     }
     const type = hasPromotionOrNot(tag.barcode)
     if (type && type === 'BUY_TWO_GET_ONE_FREE') {
-      receiptItem['discountedPrice'] = (Math.floor(tag.quantity / 3) * Number(receiptItem.unitPrice)).toFixed(2)
-      receiptItem['subtotal'] = (Number(receiptItem.quantity?.value) * Number(receiptItem.unitPrice) - Number(receiptItem.discountedPrice)).toFixed(2)
-    }else{
-      receiptItem['discountedPrice'] = '0'
-      receiptItem['subtotal'] = (Number(receiptItem.quantity?.value) * Number(receiptItem.unitPrice)).toFixed(2)
+      receiptItem['discountedPrice'] = Math.floor(Number(tag.quantity) / 3) * Number(receiptItem.unitPrice)
+      receiptItem['subtotal'] = Number(receiptItem.quantity?.value) * Number(receiptItem.unitPrice) - Number(receiptItem.discountedPrice)
+    } else {
+      receiptItem['discountedPrice'] = 0
+      receiptItem['subtotal'] = Number(receiptItem.quantity?.value) * Number(receiptItem.unitPrice)
     }
     receiptItems.push(receiptItem)
   })
@@ -120,7 +134,7 @@ function renderReceipt(receiptItems: ReceiptItem[]): string {
   const details = receiptItems.map((row) => {
     total += Number(row.subtotal)
     discountedPrices += Number(row.discountedPrice)
-    return `Name：${row.name}，Quantity：${row.quantity?.value} ${row.quantity?.quantifier}，Unit：${row.unitPrice}(yuan)，Subtotal：${row.subtotal}(yuan)`
+    return `Name：${row.name}，Quantity：${row.quantity?.value} ${row.quantity?.quantifier}，Unit：${row.unitPrice?.toFixed(2)}(yuan)，Subtotal：${row.subtotal?.toFixed(2)}(yuan)`
   }).join('\n')
 
   const res = `***<store earning no money>Receipt ***\n${details}
