@@ -24,4 +24,57 @@ Discounted prices：7.50(yuan)
 
     expect(printReceipt(tags)).toEqual(expectText)
   })
+
+  it('should print exception with invalid barcode when print receipt', () => {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+      'ITEM000006'
+    ]
+
+    const expectText = '[ERROR]: barcode not found'
+
+    expect(printReceipt(tags)).toEqual(expectText)
+  })
+
+  it('should print exception with invalid format when print receipt', () => {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001*',
+      'ITEMA00003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ]
+
+    const expectText = '[ERROR]: invalid format'
+
+    expect(printReceipt(tags)).toEqual(expectText)
+  })
+
+  it('should print exception with invalid rule when print receipt', () => {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2.5',
+    ]
+
+    const expectText = '[ERROR]: invalid rule'
+
+    expect(printReceipt(tags)).toEqual(expectText)
+  })
+
 })
