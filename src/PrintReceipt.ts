@@ -1,8 +1,8 @@
 import {loadAllItems, loadPromotions} from './Dependencies'
 
-let items = loadAllItems()
-let itemsMap = buildItemsMap(items)
-let promotions = loadPromotions()
+const items = loadAllItems()
+const itemsMap = buildItemsMap(items)
+const promotions = loadPromotions()
 
 type Item = {
   barcode: string
@@ -17,9 +17,6 @@ type ReceiptItem = {
   subtotal: number
 }
 export function printReceipt(tags: string[]): string {
-  items = loadAllItems()
-  itemsMap = buildItemsMap(items)
-  promotions = loadPromotions()
   for (const tag of tags) {
     const error = checkTagFormatValid(tag) || checkTagExist(tag) || checkTagRuleValid(tag)
     if (error) {
