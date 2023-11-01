@@ -10,7 +10,8 @@
   "license": "Apache-2.0",
   "keywords": [],
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
+    "clearCache": "jest --clearCache",
     "test:watch": "jest --watch",
     "lint": "eslint src test",
     "fix": "eslint src test --fix",
